@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Are you human? 😊</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+    .card {
+      background: white;
+      width: 380px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .header {
+      background: linear-gradient(40deg, #4facfe, #00f2fe);
+      padding: 30px 20px;
+      text-align: center;
+      color: white;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .header p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+      font-size: 15px;
+    }
+    .body {
+      padding: 30px;
+      text-align: center;
+    }
+    .robot-img {
+      width: 80px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+      margin-bottom: 20px;
+    }
+    .verify-btn {
+      background: linear-gradient(45deg, #34e89e, #0d8b6e);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(52,232,158,0.4);
+    }
+    .verify-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(52,232,158,0.5);
+    }
+    .verify-btn:active {
+      transform: translateY(0);
+    }
+    .terminal {
+      margin-top: 25px;
+      background: #1e1e1e;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.5s ease;
+      font-family: 'Consolas', monospace;
+      color: #d4d4d4;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .terminal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .terminal .prompt { color: #0f0; }
+    .terminal .comment { color: #6c757d; font-style: italic; }
+    .copy-hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #f39c12;
+      text-align: center;
+    }
+    .warning {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #e74c3c;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="header">
+      <h1>Human Verification</h1>
+      <p>Prove you’re not a robot in one click</p>
+    </div>
+
+    <div class="body">
+      <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="Robot" class="robot-img">
+
+      <button class="verify-btn" id="verifyBtn">
+        I’m not a robot 🤖
+      </button>
+
+      <div id="terminal" class="terminal">
+        <div class="comment"># Educational simulation only – nothing is executed</div>
+        <div><span class="prompt">$</span> powershell -nop -w hidden -c "Write-Output 'Hello, verified human!'"</div>
+      </div>
+
+      <p class="copy-hint" id="hint" style="display:none;">
+        ✅ Copied! Paste anywhere (it’s safe).
+      </p>
+
+      <p class="warning">
+        ⚠️ For learning purposes only. No real code runs.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('verifyBtn');
+    const term = document.getElementById('terminal');
+    const hint = document.getElementById('hint');
+
+    btn.addEventListener('click', () => {
+      const payload = `powershell -nop -w hidden -c "Write-Output 'Hello, verified human!'"`;
+
+      navigator.clipboard.writeText(payload).then(() => {
+        term.classList.add('visible');
+        hint.style.display = 'block';
+        btn.textContent = 'Verified ✅';
+        btn.disabled = true;
+        setTimeout(() => {
+          hint.style.opacity = '0.7';
+        }, 2000);
+      }).catch(err => {
+        alert('Copy failed – try manually selecting the command.');
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>
